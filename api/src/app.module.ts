@@ -1,4 +1,5 @@
 import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { Module } from '@nestjs/common';
 
 import { AuthModule } from './auth/auth.module';
@@ -21,6 +22,13 @@ import { UsersModule } from './users/users.module';
       },
       defaults: {
         from: '"my-api" <my-api@contact.com>',
+      },
+      template: {
+        dir: process.cwd() + '/src/templates',
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true,
+        },
       },
     }),
   ],

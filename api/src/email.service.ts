@@ -9,7 +9,11 @@ export class EmailService {
     await this.mailerService.sendMail({
       to: email,
       subject: 'Validation Token',
-      text: `Your validation token is ${token}`,
+      template: 'validation',
+      context: {
+        frontUrl: process.env.FRONT_URL,
+        token,
+      },
     });
   }
 }

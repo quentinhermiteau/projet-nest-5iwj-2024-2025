@@ -6,7 +6,7 @@ import {
 import * as bcrypt from 'bcrypt';
 
 import { JwtService } from '@nestjs/jwt';
-import { TokenType } from 'generated/prisma';
+import { TokenType, UserStatus } from 'generated/prisma';
 import { EmailService } from 'src/email.service';
 import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/users.service';
@@ -29,7 +29,7 @@ export class AuthService {
   async signIn(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findOneByEmail(email);
 
-    if (!user) {
+    if (!user || user.status !== UserStatus.ACTIVE) {
       throw new UnauthorizedException();
     }
 

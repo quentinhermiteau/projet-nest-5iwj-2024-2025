@@ -6,14 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FormEvent } from "react";
 
-export default function Register() {
+export default function Login() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.target as HTMLFormElement);
     const email = data.get("email") as string;
     const password = data.get("password") as string;
 
-    fetch(process.env.NEXT_PUBLIC_API_URL + "/auth/register", {
+    fetch(process.env.NEXT_PUBLIC_API_URL + "/auth/login", {
       method: "POST",
       body: JSON.stringify({ email, password }),
       headers: {
@@ -32,7 +32,7 @@ export default function Register() {
     <div className="flex justify-center items-center h-screen">
       <Card className="w-[400px]">
         <CardHeader>
-          <CardTitle>Register</CardTitle>
+          <CardTitle>Login</CardTitle>
         </CardHeader>
         <CardContent>
           <form className="space-y-4" onSubmit={(e) => handleSubmit(e)}>
@@ -45,7 +45,7 @@ export default function Register() {
               <Input type="password" name="password" />
             </div>
             <Button className="cursor-pointer" type="submit">
-              Register
+              Login
             </Button>
           </form>
         </CardContent>

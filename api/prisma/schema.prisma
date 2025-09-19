@@ -21,11 +21,18 @@ model Cat {
   breed String?
 }
 
+enum UserStatus {
+  PENDING_VALIDATION
+  ACTIVE
+  INACTIVE
+}
+
 model User {
-  id        String    @id @default(uuid())
-  email     String    @unique
+  id        String     @id @default(uuid())
+  email     String     @unique
   password  String
-  createdAt DateTime  @default(now())
+  status    UserStatus @default(PENDING_VALIDATION)
+  createdAt DateTime   @default(now())
   updatedAt DateTime?
   Token     Token[]
 }
@@ -39,6 +46,7 @@ model Token {
   type      TokenType
   userId    String
   user      User      @relation(fields: [userId], references: [id])
+  isUsed    Boolean   @default(false)
   createdAt DateTime  @default(now())
   updatedAt DateTime?
 }

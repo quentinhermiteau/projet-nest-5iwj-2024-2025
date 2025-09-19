@@ -35,7 +35,6 @@ export class AuthController {
     description: 'Registered',
   })
   async register(@Body() registerDto: RegisterDto) {
-    console.log(registerDto);
     const user = await this.authService.register(registerDto);
     return user;
   }

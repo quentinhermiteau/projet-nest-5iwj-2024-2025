@@ -1,26 +1,34 @@
-import { Injectable } from '@nestjs/common';
-import { CreateTokenDto } from './dto/create-token.dto';
-import { UpdateTokenDto } from './dto/update-token.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { UserStatus } from 'generated/prisma';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class TokensService {
-  create(createTokenDto: CreateTokenDto) {
-    return 'This action adds a new token';
-  }
+  constructor(private readonly prisma: PrismaService) {}
 
-  findAll() {
-    return `This action returns all tokens`;
-  }
+  async validate(token: string) {
+    const foundToken = await this.prisma.token.findUnique({
+      where: { id: token, isUsed: false },
+    });
 
-  findOne(id: number) {
-    return `This action returns a #${id} token`;
-  }
+    console.log(token, foundToken);
 
-  update(id: number, updateTokenDto: UpdateTokenDto) {
-    return `This action updates a #${id} token`;
-  }
+    if (!foundToken) {
+      throw new NotFoundException('Token not found');
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} token`;
+    await this.prisma.$transaction(async (tx) => {
+      await tx.token.update({
+        where: { id: token },
+        data: { isUsed: true },
+      });
+
+      await tx.user.update({
+        where: { id: foundToken.userId },
+        data: { status: UserStatus.ACTIVE },
+      });
+    });
+
+    return 'This action validates a token';
   }
 }
