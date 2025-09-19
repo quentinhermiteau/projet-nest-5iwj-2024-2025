@@ -8,6 +8,7 @@ import { EmailService } from './email.service';
 import { PrismaService } from './prisma.service';
 import { TokensModule } from './tokens/tokens.module';
 import { UsersModule } from './users/users.module';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { UsersModule } from './users/users.module';
         },
       },
     }),
+    EventsModule,
   ],
   controllers: [],
   providers: [PrismaService, EmailService],
